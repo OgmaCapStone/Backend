@@ -15,7 +15,7 @@ import app.utils.connections.questions as Questions_conn
 import app.utils.connections.technologies as Tech_conn
 
 from app.utils.questions_formating import questions_formating,check_question
-from app.utils.users_formating import user_format,users_format,user_format_body
+from app.utils.users_formating import user_format
 from app.utils.progress_formating import progresses_format,progress_percentage_formating
 from app.utils.badge_identification import badge_identification
 from app.utils.question_validation import question_validation

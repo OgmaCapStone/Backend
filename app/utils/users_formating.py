@@ -6,33 +6,13 @@ def user_format(user):
     json["name"] = user[0]
     json["email"] = user[1]
     json["username"] = user[2]
-    if user[6] != None:
+    if user[3] != None:
         json["badges"] = user[3]
     else:
         json["badges"] = list()
-    if user[7] != None:
+    if user[4] != None:
         json["prefered_technologies"] = user[4]
     else:
         json["prefered_technologies"] = list()
     json["profile_pic"] = user[5]
-    return json
-
-def users_format(users):
-    json = dict()
-    json["users"] = list()
-    for user in users:
-        json["users"].append(user_format(user))
-    return json
-
-def user_format_body(user):
-    json = dict()
-    json["id"] = user.id
-    json["name"] = user.name
-    json["email"] = user.email
-    json["username"] = user.username
-    json["password"] = user.password
-    json["login_type"] = user.login_type
-    json["badges"] = user.badges
-    json["prefered_technologies"] = user.prefered_technologies
-    json["profile_pic"] = user.profile_pic
     return json
