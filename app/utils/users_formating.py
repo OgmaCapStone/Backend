@@ -3,18 +3,18 @@ from typing import List
 
 def user_format(user):
     json = dict()
-    json["name"] = user[1]
-    json["email"] = user[2]
-    json["username"] = user[3]
+    json["name"] = user[0]
+    json["email"] = user[1]
+    json["username"] = user[2]
     if user[6] != None:
-        json["badges"] = user[6]
+        json["badges"] = user[3]
     else:
         json["badges"] = list()
     if user[7] != None:
-        json["prefered_technologies"] = user[7]
+        json["prefered_technologies"] = user[4]
     else:
         json["prefered_technologies"] = list()
-    json["profile_pic"] = user[8]
+    json["profile_pic"] = user[5]
     return json
 
 def users_format(users):

@@ -20,7 +20,7 @@ def add_user(name,email,password,login_type,username):
 def get_user_by_username(username):
 
     query = f"""
-    SELECT * 
+    SELECT name,email,username,badges,prefered_technologies,profile_pic 
     FROM users 
     WHERE username = '{username}' 
     """
@@ -33,7 +33,7 @@ def get_user_by_username(username):
 def get_user_by_email(email):
 
     query = f"""
-    SELECT * 
+    SELECT name,email,username,badges,prefered_technologies,profile_pic
     FROM users 
     WHERE email = '{email}' 
     """
