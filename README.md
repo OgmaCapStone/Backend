@@ -119,20 +119,10 @@ This app was created with 💚 by:
 
 ```json
 	{
-	  "name": str,
-	  "email": str,
-	  "password": str,
-	  "login_type": str,
-	  "username": str,
-	}
-	{
 	  "response": {
-	    "id": int,
 	    "name": str,
 	    "email": str,
 	    "username": str,
-	    "password": str,
-	    "login_type": str,
 	    "badges": [
 	      str
 	    ],

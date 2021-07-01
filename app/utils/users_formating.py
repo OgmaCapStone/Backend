@@ -3,12 +3,9 @@ from typing import List
 
 def user_format(user):
     json = dict()
-    json["id"] = user[0]
     json["name"] = user[1]
     json["email"] = user[2]
     json["username"] = user[3]
-    json["password"] = user[4]
-    json["login_type"] = user[5]
     if user[6] != None:
         json["badges"] = user[6]
     else:
