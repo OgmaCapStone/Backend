@@ -1,4 +1,4 @@
-import app.utils.users_formating as uf
+from app.utils.users_formating import user_format
 
 import random
 from faker import Faker
@@ -20,7 +20,7 @@ user = [
 ]
 
 def test_should_pass():
-    assert uf.user_format(user) == {"name": name, "email": email, "username": username, "badges": [], "prefered_technologies": [], "profile_pic": ""}
+    assert user_format(user) == {"name": name, "email": email, "username": username, "badges": [], "prefered_technologies": [], "profile_pic": ""}
 
 def test_should_not_pass():
-    assert uf.user_format(user) == {"email": email, "username": username, "badges": [], "prefered_technologies": [], "profile_pic": ""}
+    assert user_format(user) == {"email": email, "username": username, "badges": [], "prefered_technologies": [], "profile_pic": ""}

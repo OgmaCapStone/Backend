@@ -1,26 +1,11 @@
-import app.utils.technologies_formating as tf
+from app.utils.technologies_formating import technologies_formating
+technologies = [
 
-import random
-from faker import Faker
-
-fake = Faker()
-
-name = fake.name()
-username = name + f"{random.randint(0,9)}"
-username = username.replace(" ","")
-email = username + "@gmail.com"
-
-user = [
-    name,
-    email,
-    username,
-    [],
-    [],
-    ""
+    ["id","tech","tech image","tech summary"]
 ]
 
 def test_should_pass():
-    assert tf.technologies_formating(user) == {"name": name, "email": email, "username": username, "badges": [], "prefered_technologies": [], "profile_pic": ""}
+    assert technologies_formating(technologies) == {"name": technologies[0][1], "image": technologies[0][2], "summary": technologies[0][3]}
 
 def test_should_not_pass():
-    assert tf.technologies_formating(user) == {"email": email, "username": username, "badges": [], "prefered_technologies": [], "profile_pic": ""}
+    assert technologies_formating(technologies) == {"name": technologies[0][0], "image": technologies[0][3], "summary": technologies[0][1]}

@@ -15,4 +15,5 @@ def user_format(user):
     else:
         json["prefered_technologies"] = list()
     json["profile_pic"] = user[5]
+    json["password"] = user[6]
     return json
