@@ -244,13 +244,15 @@ async def update_user_update_progress(
 
     return {"response": "Progress updated"}
 
-
-
 @app.post("/questions/add")
 async def post_questions(question: Questions):   
 
     if question.password != settings.QUESTIONS_PASSWORD:
         raise HTTPException(status_code=401, detail="Authorization denied")
+
+
+    if not question.right_answer in question.answers:
+        raise HTTPException(status_code=401, detail="The right answer does not correspond with any of the answers")
 
     questions = Questions_conn.get_all_questions_tech(question.technology)
     
