@@ -2,11 +2,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import HTTPException
 
-from typing import List, Optional
-from pydantic import BaseModel
 import bcrypt
 
 from app.core.config import settings
+
+from app.utils.Classes import Users,Technology,Progress,Questions
 
 import app.utils.connections.users as User_conn
 import app.utils.connections.levels as Level_conn
@@ -39,37 +39,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-### THIS CLASSES NEED TO BE IN A DIFFERENT FILE MY DUDE
-
-class Users(BaseModel):
-    name: Optional[str]
-    email: Optional[str]
-    password: Optional[str] = None
-    login_type: Optional[str]
-    username: Optional[str]
-    badges: Optional[List] = None
-    prefered_technologies: Optional[List] = None
-    profile_pic: Optional[str] = ""
-
-class Technology(BaseModel):
-    name: str
-
-class Progress(BaseModel):
-    percentage: int
-    user: Users
-    technology: Technology
-
-class Questions(BaseModel):
-    answers: List[str]
-    image: str
-    level: int
-    technology: int
-    question: str
-    right_answer: str
-    password: str
-
-
 
 @app.post("/users/create")
 async def post_users(user: Users):
@@ -116,10 +85,9 @@ async def update_user(user: Users):
     original_user = user_format(info[0])
 
     user_updated = dict()
-    user_updated["id"] = original_user["id"]
+    user_updated["id"] = info[0][7]
     user_updated["name"] = user.name or original_user["name"]
     user_updated["password"] = user.password or original_user["password"]
-    user_updated["login_type"] = user.login_type or original_user["login_type"]
     user_updated["username"] = user.username or original_user["username"]
     user_updated["email"] = user.email or original_user["email"]
     user_updated["badges"] = user.badges or original_user["badges"]
@@ -184,10 +152,9 @@ async def post_user_technology_add(
     user_to_update["prefered_technologies"].append(technology.name)
 
     user_updated = dict()
-    user_updated["id"] = user_to_update["id"]
+    user_updated["id"] = users[0][7]
     user_updated["name"] = user.name or user_to_update["name"]
     user_updated["password"] = user.password or user_to_update["password"]
-    user_updated["login_type"] = user.login_type or user_to_update["login_type"]
     user_updated["username"] = user.username or user_to_update["username"]
     user_updated["email"] = user.email or user_to_update["email"]
     user_updated["badges"] = user.badges or user_to_update["badges"]
@@ -196,7 +163,7 @@ async def post_user_technology_add(
 
     User_conn.update_user(user_updated)
 
-    Progresses_conn.add_user_progress(technology.name,user_to_update['id'])
+    Progresses_conn.add_user_progress(technology.name,user_updated['id'])
     
     return {"response": "Technology added"}
 
@@ -221,10 +188,9 @@ async def delete_user_technology_remove(
     user_to_update["prefered_technologies"].remove(technology.name)
 
     user_updated = dict()
-    user_updated["id"] = user_to_update["id"]
+    user_updated["id"] = users[0][7]
     user_updated["name"] = user.name or user_to_update["name"]
     user_updated["password"] = user.password or user_to_update["password"]
-    user_updated["login_type"] = user.login_type or user_to_update["login_type"]
     user_updated["username"] = user.username or user_to_update["username"]
     user_updated["email"] = user.email or user_to_update["email"]
     user_updated["badges"] = user.badges or user_to_update["badges"]
@@ -233,7 +199,7 @@ async def delete_user_technology_remove(
 
     User_conn.update_user(user_updated)
     
-    Progresses_conn.remove_user_progress(technology.name,user_to_update['id'])
+    Progresses_conn.remove_user_progress(technology.name,user_updated['id'])
 
     return {"response": "Technology removed"}
 
@@ -251,7 +217,7 @@ async def update_user_update_progress(
         raise HTTPException(status_code=400, detail="Invalid credentials")
 
     user = user_format(user_info[0])
-    user_id = user["id"]
+    user_id = user_info[0][7]
  
     percentage = Progresses_conn.get_user_progress_by_tech(user_id,progress.technology.name)
 
@@ -267,6 +233,8 @@ async def update_user_update_progress(
 
         user_updated = badge_identification(progresses["users_progresses"],user)
 
+        user_updated["id"] = user_id
+
         User_conn.update_user(user_updated)
 
     return {"response": "Progress updated"}
@@ -279,8 +247,9 @@ async def post_questions(question: Questions):
     if question.password != settings.QUESTIONS_PASSWORD:
         raise HTTPException(status_code=401, detail="Authorization denied")
 
+    questions = Questions_conn.get_all_questions_tech(question.technology)
     
-    valid = question_validation(question)
+    valid = question_validation(question,questions)
 
     if valid:
         raise HTTPException(status_code=400, detail="This question all ready exist in out data base")

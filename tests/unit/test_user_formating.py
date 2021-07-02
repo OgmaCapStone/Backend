@@ -16,11 +16,12 @@ user = [
     username,
     [],
     [],
-    ""
+    "",
+    "pass"
 ]
 
 def test_should_pass():
-    assert user_format(user) == {"name": name, "email": email, "username": username, "badges": [], "prefered_technologies": [], "profile_pic": ""}
+    assert user_format(user) == {"name": name, "email": email, "username": username, "badges": [], "prefered_technologies": [], "profile_pic": "", "password": "pass"}
 
 def test_should_not_pass():
-    assert user_format(user) == {"email": email, "username": username, "badges": [], "prefered_technologies": [], "profile_pic": ""}
+    assert user_format(user) != {"email": email, "username": username, "badges": [], "prefered_technologies": [], "profile_pic": "", "password": "pass"}

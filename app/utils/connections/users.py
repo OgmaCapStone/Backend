@@ -20,7 +20,7 @@ def add_user(name,email,password,login_type,username):
 def get_user_by_username(username):
 
     query = f"""
-    SELECT name,email,username,badges,prefered_technologies,profile_pic,password 
+    SELECT name,email,username,badges,prefered_technologies,profile_pic,password,users_id
     FROM users 
     WHERE username = '{username}' 
     """
@@ -49,7 +49,6 @@ def update_user(user):
     UPDATE users
     SET name = %s,
         password = %s,
-        login_type = %s,
         username = %s,
         badges = %s,
         prefered_technologies = %s,
@@ -61,7 +60,6 @@ def update_user(user):
     db.connect()
     result = db.update_row(query,(user["name"],
                                 user["password"],
-                                user["login_type"],
                                 user["username"],
                                 user["badges"],
                                 user["prefered_technologies"],
