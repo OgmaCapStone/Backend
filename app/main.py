@@ -216,9 +216,14 @@ async def update_user_update_progress(
     if len(user_info) < 1:
         raise HTTPException(status_code=400, detail="Invalid credentials")
 
+    
+
     user = user_format(user_info[0])
     user_id = user_info[0][7]
  
+    if not progress.technology.name in user["prefered_technologies"]:
+        raise HTTPException(status_code=400, detail="Sorry you do not have that technology in the first place")
+
     percentage = Progresses_conn.get_user_progress_by_tech(user_id,progress.technology.name)
 
     if percentage >= progress.percentage:
@@ -270,6 +275,8 @@ async def get_user_progress( username: str ):
         raise HTTPException(status_code=400, detail="Sorry this user does not exist")
     
     user_formated = user_format(user[0])
+
+    user_formated["id"] = user[0][7]
 
     progresses = Progresses_conn.get_progress(user_formated)
 
